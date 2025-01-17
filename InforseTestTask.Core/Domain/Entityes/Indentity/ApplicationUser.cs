@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace InforseTestTask.Core.Domain.Entityes.Indentity
 {
-    public class ApplicationUser : IdentityUser<long>
+    public class ApplicationUser : IdentityUser<Guid>
     {
         public ISet<ShortUrl> createdUrls { get; set; } = new HashSet<ShortUrl>();
     }

@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using InforseTestTask.Core.Domain.Repositories;
+using InforseTestTask.Infastructure.Repositories;
+using InforseTestTask.Core.Services;
+using InforseTestTask.Core.Services.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +23,9 @@ builder.Services.AddDbContext<InforseDBContext>(options =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policyBuilder =>
@@ -30,6 +37,13 @@ builder.Services.AddCors(options =>
     });
 });
 
+
+builder.Services.AddScoped<IShortUrlRepository, ShortUrlRepository>();
+builder.Services.AddScoped<IAboutInfoRepository, AboutInfoRepository>();
+
+builder.Services.AddScoped<IShortUrlService, ShortUrlService>();
+
+builder.Services.AddTransient<IJwtService, JwtServiceImpl>();
 
 
 builder.Services.AddAuthentication(options =>
@@ -63,9 +77,10 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     .AddEntityFrameworkStores<InforseDBContext>()
     .AddDefaultTokenProviders()
     .AddUserStore<UserStore<ApplicationUser, ApplicationRole,
-    InforseDBContext, long>>()
+    InforseDBContext, Guid>>()
     .AddRoleStore<RoleStore<ApplicationRole,
-    InforseDBContext, long>>();
+    InforseDBContext, Guid>>();
+
 
 var app = builder.Build();
 
@@ -73,6 +88,9 @@ var app = builder.Build();
 
 app.UseRouting();
 app.UseCors();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthentication();
 app.UseAuthorization();

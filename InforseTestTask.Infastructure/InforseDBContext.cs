@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace InforseTestTask.Infastructure
 {
-    public class InforseDBContext : IdentityDbContext<ApplicationUser, ApplicationRole, long>
+    public class InforseDBContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
         public InforseDBContext(DbContextOptions options) : base(options) { }
 
@@ -25,6 +25,29 @@ namespace InforseTestTask.Infastructure
         {
             builder.ApplyConfigurationsFromAssembly(typeof(InforseDBContext).Assembly);
             base.OnModelCreating(builder);
+
+            var userRoleId = Guid.NewGuid();
+            var adminRoleId = Guid.NewGuid();
+
+            var roles = new List<ApplicationRole>
+            {
+                new ApplicationRole
+                {
+                    Id = userRoleId,
+                    ConcurrencyStamp = userRoleId.ToString(),
+                    Name = "User",
+                    NormalizedName = "User".ToUpper()
+                },
+                new ApplicationRole
+                {
+                    Id = adminRoleId,
+                    ConcurrencyStamp = adminRoleId.ToString(),
+                    Name = "Admin",
+                    NormalizedName = "Admin".ToUpper()
+                },
+            };
+
+            builder.Entity<ApplicationRole>().HasData(roles);
         }
     }
 }

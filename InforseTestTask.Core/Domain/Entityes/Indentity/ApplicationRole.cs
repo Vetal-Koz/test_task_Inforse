@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace InforseTestTask.Core.Domain.Entityes.Indentity
 {
-    public class ApplicationRole : IdentityRole<long>
+    public class ApplicationRole : IdentityRole<Guid>
     {
     }
 }

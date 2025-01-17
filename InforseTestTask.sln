@@ -5,9 +5,14 @@ VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InforseTestTask.Api", "InforseTestTask\InforseTestTask.Api.csproj", "{6BD7D7FE-8C00-4D78-80E6-23B0E1F7CF2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InforseTestTask.Core", "InforseTestTask.Core\InforseTestTask.Core.csproj", "{7F55080B-8C87-4EAF-8768-2BD41FD7A05D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InforseTestTask.Core", "InforseTestTask.Core\InforseTestTask.Core.csproj", "{7F55080B-8C87-4EAF-8768-2BD41FD7A05D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InforseTestTask.Infastructure", "InforseTestTask.Infastructure\InforseTestTask.Infastructure.csproj", "{90E18C00-DF6E-4555-A583-F0D7300CA1A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InforseTestTask.Infastructure", "InforseTestTask.Infastructure\InforseTestTask.Infastructure.csproj", "{90E18C00-DF6E-4555-A583-F0D7300CA1A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0DF41EB7-B854-4965-BBE8-A10CC7EB3FAC}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
