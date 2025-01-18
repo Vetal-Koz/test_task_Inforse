@@ -1,6 +1,7 @@
 ﻿using InforseTestTask.Core.Domain.Entityes.Indentity;
 using InforseTestTask.Core.DTO.Auth;
 using InforseTestTask.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ namespace InforseTestTask.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -25,6 +27,7 @@ namespace InforseTestTask.Api.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<ActionResult<AuthResposne>> Register([FromBody] RegisterDTO registerDTO)
         {
             if (ModelState.IsValid == false)

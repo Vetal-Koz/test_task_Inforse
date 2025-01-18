@@ -11,6 +11,9 @@ using InforseTestTask.Core.Services;
 using InforseTestTask.Core.Services.Impl;
 using Serilog;
 using InforseTestTask.Api.Middlewares;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +28,8 @@ builder.Services.AddDbContext<InforseDBContext>(options =>
 
 builder.Services.AddControllers();
 
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -37,6 +42,7 @@ builder.Services.AddCors(options =>
         policyBuilder.WithMethods("GET", "POST", "DELETE", "PUT");
         //policyBuilder.WithOrigins("http://localhost:4200");
     });
+
 });
 
 
@@ -50,11 +56,40 @@ builder.Services.AddTransient<IJwtService, JwtServiceImpl>();
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddControllers(options => {
+    options.Filters.Add(new ProducesAttribute("application/json"));
+    options.Filters.Add(new ConsumesAttribute("application/json"));
+
+    //Authorization policy
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+})
+ .AddXmlSerializerFormatters();
+
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+{
+    options.Password.RequiredLength = 5;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireDigit = true;
+})
+    .AddEntityFrameworkStores<InforseDBContext>()
+    .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("NZWalks")
+    .AddUserStore<UserStore<ApplicationUser, ApplicationRole,
+    InforseDBContext, Guid>>()
+    .AddRoleStore<RoleStore<ApplicationRole,
+    InforseDBContext, Guid>>()
+    .AddDefaultTokenProviders();
+
 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+})
+    .AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters()
     {
@@ -69,20 +104,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
-{
-    options.Password.RequiredLength = 5;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireDigit = true;
-})
-    .AddEntityFrameworkStores<InforseDBContext>()
-    .AddDefaultTokenProviders()
-    .AddUserStore<UserStore<ApplicationUser, ApplicationRole,
-    InforseDBContext, Guid>>()
-    .AddRoleStore<RoleStore<ApplicationRole,
-    InforseDBContext, Guid>>();
+builder.Services.AddAuthorization(options => {
+});
+
+
 
 
 var app = builder.Build();

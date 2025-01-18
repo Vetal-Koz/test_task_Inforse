@@ -27,15 +27,7 @@ namespace InforseTestTask.Core.Services.Impl
 
             List<Claim> claims = new List<Claim> {
 
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-
-                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-
                 new Claim(ClaimTypes.Email, user.Email),
-
-                new Claim(ClaimTypes.NameIdentifier, user.Email),
 
             };
 

@@ -18,6 +18,8 @@ namespace InforseTestTask.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
+
         public async Task<ActionResult<AboutInfoRequest>> GetById([FromRoute] long id)
         {
             var result = await _aboutInfoService.FindById(id);

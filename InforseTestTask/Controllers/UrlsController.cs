@@ -21,6 +21,7 @@ namespace InforseTestTask.Api.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List<UrlResponse>>> GetAll()
         {
             var response = await _shortUrlService.FindAll();
@@ -28,10 +29,9 @@ namespace InforseTestTask.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<ActionResult<UrlResponse>> Create([FromBody] UrlRequest urlRequest)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var result = await _shortUrlService.CreateAsync(urlRequest);
                 return Ok(result);
@@ -46,7 +46,6 @@ namespace InforseTestTask.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         public async Task<ActionResult<UrlResponse>> GetById([FromRoute] long id)
         {
             var result = await _shortUrlService.FindById(id);
@@ -54,7 +53,6 @@ namespace InforseTestTask.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
         public async Task<IActionResult> DeleteById([FromRoute] long id)
         {
             await _shortUrlService.DeleteAsync(id);
@@ -69,6 +67,7 @@ namespace InforseTestTask.Api.Controllers
         }
 
         [HttpGet("r/{shortCode}")]
+        [AllowAnonymous]
         public async Task<IActionResult> RedirectToOriginal([FromRoute] string shortCode)
         {
             var shortUrl = await _shortUrlService.FindByShortCodeAsync(shortCode);
