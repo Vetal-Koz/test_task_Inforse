@@ -9,6 +9,8 @@ using InforseTestTask.Core.Domain.Repositories;
 using InforseTestTask.Infastructure.Repositories;
 using InforseTestTask.Core.Services;
 using InforseTestTask.Core.Services.Impl;
+using Serilog;
+using InforseTestTask.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,15 +44,16 @@ builder.Services.AddScoped<IShortUrlRepository, ShortUrlRepository>();
 builder.Services.AddScoped<IAboutInfoRepository, AboutInfoRepository>();
 
 builder.Services.AddScoped<IShortUrlService, ShortUrlService>();
+builder.Services.AddScoped<IAboutInfoService, AboutInfoService>();
 
 builder.Services.AddTransient<IJwtService, JwtServiceImpl>();
+
+builder.Services.AddHttpContextAccessor();
 
 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters()
@@ -85,6 +88,8 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseMiddleware<RestExceptionHandlerMiddleware>();
 
 app.UseRouting();
 app.UseCors();

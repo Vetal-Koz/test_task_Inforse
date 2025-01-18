@@ -14,6 +14,9 @@ namespace InforseTestTask.Infastructure.Configurations
         public void Configure(EntityTypeBuilder<ShortUrl> builder)
         {
             builder
+                .HasIndex(su => su.OriginalUrl)
+                .IsUnique();
+            builder
                 .HasIndex(su => su.ShortenedUrl)
                 .IsUnique();
         }

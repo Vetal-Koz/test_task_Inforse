@@ -9,5 +9,7 @@ namespace InforseTestTask.Core.Domain.Repositories
 {
     public interface IShortUrlRepository : ICrudRepository<ShortUrl>
     {
+        Task<bool> IsExistByOriginalUrl(string originalUrl);
+        Task<ShortUrl?> FindByShortCodeAsync(string shortCode);
     }
 }

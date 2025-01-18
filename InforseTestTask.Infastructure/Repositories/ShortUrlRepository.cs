@@ -19,6 +19,7 @@ namespace InforseTestTask.Infastructure.Repositories
         }
         public async Task<ShortUrl> CreateAsync(ShortUrl entity)
         {
+            _dbContext.Attach(entity.CreatedBy);
             _dbContext.ShortUrls.Add(entity);
             await _dbContext.SaveChangesAsync();
             return entity;
@@ -36,12 +37,29 @@ namespace InforseTestTask.Infastructure.Repositories
 
         public async Task<ICollection<ShortUrl>> FindAllAsync()
         {
-            return await _dbContext.ShortUrls.ToListAsync();
+            return await _dbContext.ShortUrls.Include(su => su.CreatedBy).ToListAsync();
         }
 
         public async Task<ShortUrl?> FindByIdAsync(long id)
         {
-            return await _dbContext.ShortUrls.FindAsync(id);
+            return await _dbContext.ShortUrls
+            .Include(s => s.CreatedBy)
+            .FirstOrDefaultAsync(s => s.Id == id);
+        }
+
+        public async Task<ShortUrl?> FindByOriginalUrl(string originalUrl)
+        {
+            return await _dbContext.ShortUrls.FirstOrDefaultAsync(url => url.OriginalUrl == originalUrl);
+        }
+
+        public async Task<ShortUrl?> FindByShortCodeAsync(string shortCode)
+        {
+            return await _dbContext.ShortUrls.Include(su => su.CreatedBy).FirstOrDefaultAsync(x => x.ShortenedUrl.EndsWith($"/{shortCode}"));
+        }
+
+        public async Task<bool> IsExistByOriginalUrl(string originalUrl)
+        {
+            return await _dbContext.ShortUrls.AnyAsync(url => url.OriginalUrl == originalUrl);
         }
 
         public async Task UpdateAsync(ShortUrl entity)
@@ -49,5 +67,7 @@ namespace InforseTestTask.Infastructure.Repositories
             _dbContext.ShortUrls.Update(entity);
             await _dbContext.SaveChangesAsync();
         }
+
+
     }
 }

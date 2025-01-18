@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InforseTestTask.Core.Domain.Entityes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,15 @@ namespace InforseTestTask.Core.DTO.Response
         public string ShortenedUrl { get; set; }
         public DateTime CreatedAt { get; set; }
         public UserResponse CreatedBy { get; set; }
+
+        public UrlResponse(ShortUrl shortUrl)
+        {
+            Id = shortUrl.Id;
+            OriginalUrl = shortUrl.OriginalUrl;
+            ShortenedUrl = shortUrl.ShortenedUrl;
+            CreatedAt = shortUrl.CreatedDate;
+            CreatedBy = new UserResponse(shortUrl.CreatedBy);
+        }
     }
+
 }

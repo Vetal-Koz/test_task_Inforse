@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,8 +10,9 @@ namespace InforseTestTask.Core.DTO.Request
 {
     public class UrlRequest : ApiRequest
     {
-        [Required]
-        [Url]
+        [Required(ErrorMessage = "Url can't be null")]
+        [Url(ErrorMessage = "Url must be in appropriate apearance")]
+        [Remote(action: "IsUrlAlreadyUsed", controller: "Urls", ErrorMessage = "Url already is used")]
         public string OriginalUrl { get; set; }
     }
 }

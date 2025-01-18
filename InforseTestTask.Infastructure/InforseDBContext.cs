@@ -48,6 +48,9 @@ namespace InforseTestTask.Infastructure
             };
 
             builder.Entity<ApplicationRole>().HasData(roles);
+
+            string description = "The ShortenUrl method is a utility function that enables the transformation of a long, complex URL into a compact, easy-to-share shortened version. It utilizes a hashing technique to generate a unique identifier for the provided URL and then converts it into a shortened format, which can be shared or stored more easily. This method is ideal for applications that require a simplified URL system for linking purposes, particularly in cases where space is limited or for creating cleaner, more user-friendly links.";
+            builder.Entity<AboutInfo>().HasData(new AboutInfo { Id = 1, Description = description, LastUpdated = DateTime.UtcNow });
         }
     }
 }
