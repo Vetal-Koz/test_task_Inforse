@@ -60,7 +60,7 @@ namespace InforseTestTask.Core.Services.Impl
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             string token = tokenHandler.WriteToken(tokenGenerator);
 
-            return new AuthResposne() { Token = token, Email = user.Email, Expiration = expiration };
+            return new AuthResposne() { Token = token, Email = user.Email, Expiration = expiration, Roles = roles.ToList() };
         }
 
         public ClaimsPrincipal? GetPrincipalFromJwtToken(string? token)
